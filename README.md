@@ -23,7 +23,7 @@ This project is a web-based conference management system built with Spring Boot 
 
 - `doc/` – Project documentation and generated Javadoc (if present).
 
-#### Core Functionalities
+#### Core Functionalities (non-exhaustive)
 
 - **User Registration & Management:** Users can register, log in, there are two roles for authenticated users; Admin and User. The homepage is public so accessible to anyone.
 - **Events Scheduling:** Create, update, and view events and their schedules.
@@ -34,7 +34,7 @@ This project is a web-based conference management system built with Spring Boot 
 - **Persistence:** Data is managed using Spring Data JPA, following the Repository and DAO patterns.
 - **Security:** Spring Security for authentication and access control.
 
-#### Technologies Used
+#### Technologies Used (non-exhaustive)
 
 - **Java 17+**
 - **Spring Boot**
