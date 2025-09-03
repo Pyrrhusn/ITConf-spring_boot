@@ -2,7 +2,7 @@
 
 This project is a web-based conference management system built with Spring Boot and Thymeleaf templating engine (HTML views with CSS styling). It provides a platform for managing IT conferences, including attendee registration, session scheduling, and administration via a web interface.
 
-### Project Structure
+#### Project Structure
 
 - `src/main/java/`
   - **`controller/`** – REST and MVC controllers handling web requests and routing.
@@ -34,7 +34,7 @@ This project is a web-based conference management system built with Spring Boot 
 - **Persistence:** Data is managed using Spring Data JPA, following the Repository and DAO patterns.
 - **Security:** Spring Security for authentication and access control.
 
-## Technologies Used
+#### Technologies Used
 
 - **Java 17+**
 - **Spring Boot**
