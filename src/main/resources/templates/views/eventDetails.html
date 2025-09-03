@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout(~{::title}, _, ~{::.pageTitle}, ~{::main})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{view.ed.title}"></title>
+</head>
+<body>
+    <h2 class="pageTitle">
+        <i class="bi bi-info-square"></i> <span th:text="${event.naam}"></span>
+    </h2>
+    
+    <main>
+    	<div class="container mt-4">
+    		<div class="row justify-content-center m-0">
+        			<div class="card border-secondary col-lg-8 border-opacity-50">
+        				<div class="card-body text-wrap">
+        					<dl class="row align-items-stretch align-self-stretch justify-content-between m-0">
+        						<dt class="col-4 fs-6 m-0" th:text="|#{view.ed.naam}:|"></dt>
+        						<dd class="col-8 fs-6 mb-2" th:text="${event.naam}"></dd>
+        						
+        						<dt class="col-4 fs-6 m-0" th:text="|#{view.ed.beschrijving}:|"></dt>
+        						<dd class="col-8 fs-6 mb-2">
+        							<div th:if="${event.beschrijving}" th:text="${event.beschrijving}"></div>
+        							<i th:unless="${event.beschrijving}" class="bi bi-slash-lg"></i>
+        						</dd>
+        						
+        						<dt class="col-4 fs-6 m-0" th:text="${#lists.size(event.sprekers) > 1} ? #{view.ed.sprekers.plural} : #{view.ed.sprekers.singular} + ':'"></dt>
+        						<dd class="col-8 fs-6 mb-2">
+        							<th:block th:each="spreker : ${event.sprekers}">
+        							<div th:text="${spreker.naam}"></div>
+        							</th:block>
+        						</dd>
+        						
+        						 <dt class="col-4 fs-6 m-0" th:text="|#{view.ed.lokaal}:|"></dt>
+        						<dd class="col-8 fs-6 mb-2" th:text="|${event.lokaal.naam} (#{view.ed.capaciteit}: ${event.lokaal.capaciteit})|"></dd>
+        						
+        						<dt class="col-4 fs-6 m-0" th:text="|#{view.ed.datum} #{view.ed.en} #{view.ed.tijd}:|"></dt>
+        						<dd class="col-8 fs-6 mb-2">
+        							<div th:with="df=#{date.format.pattern}" th:text="${#temporals.format(event.datum, df)}"></div>
+        							<div th:with="tf=#{time.format.pattern}" th:text="|${#temporals.format(event.startTijdstip, tf)} - ${#temporals.format(event.eindTijdstip, tf)}|"></div>
+        						</dd>
+        						
+        						<dt class="col-4 fs-6 m-0" th:text="|#{view.ed.prijs}:|"></dt>
+        						<dd class="col-8 fs-6 mb-2" th:text="|&euro; ${{event.prijs}}|"></dd>
+        					</dl>
+        				</div>
+        				<div class="card-footer bg-transparent">
+        					<form th:action="@{/favorieten}" method="post" sec:authorize="hasRole('ROLE_USER')" th:if="${kanAanFavorietToevoegen or isFavoriet}">
+  								<input type="hidden" name="eventId" th:value="${event.id}" />
+    							<input type="hidden" name="action" th:value="${isFavoriet} ? 'remove' : 'add'" />
+    							<input type="hidden" name="location" th:value="eventDetails" />
+  								<button type="submit" class="btn" th:classappend="${isFavoriet} ? 'btn-danger' : 'btn-primary'">
+  									<i class="bi bi-bookmark-heart-fill"></i>
+  									<span th:text="${isFavoriet} ? #{view.ed.knopFavoriet.remove} : #{view.ed.knopFavoriet.add}"></span>
+  								</button>
+  							</form>
+  							
+  							<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-warning" th:href="|/event/${event.id}/bewerken|">
+  							<i class="bi bi-wrench me-1"></i>
+  							<span th:text="#{view.ed.knopBewerk}"></span>
+  							</a>
+        				</div>
+        			</div>
+        	</div>
+        </div>
+    </main>
+</body>
+</html>

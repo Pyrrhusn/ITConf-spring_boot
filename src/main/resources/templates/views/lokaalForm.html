@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout(~{::title}, _, ~{::.pageTitle}, ~{::main})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lokaal toevoegen</title>
+</head>
+<body>
+	<h2 class="pageTitle">
+        <i class="bi bi-database-add"></i> Lokaal toevoegen
+    </h2>
+    
+    <main>
+    <div class="container mt-4">
+    <div class="row justify-content-center">
+		
+		<div class="col-lg-8">
+    	<div th:if="${lokaalSaveSuccessMessage}" class="alert alert-success d-flex align-items-center" role="alert">			
+    		<i class="bi bi-check-circle-fill"></i> <div th:text="${lokaalSaveSuccessMessage}" class="ms-2"></div>
+		</div>
+			<form th:action="@{/lokaal/toevoegen}" th:object="${lokaal}" method="post">
+				<!-- Naam -->
+				<div class="mb-3">
+                    <label for="naam" class="form-label mb-1">Naam *</label>
+                    <input type="text" class="form-control" id="naam" th:field="*{naam}" />
+                    <div class="text-danger form-text" th:if="${#fields.hasErrors('naam')}" th:errors="*{naam}"></div>
+                </div>
+				
+				<!-- Capaciteit -->
+				<div class="mb-3">
+                    <label for="capaciteit" class="form-label mb-1">Capaciteit *</label>
+                    <input type="number" step="1" min="1" class="form-control" id="capaciteit" th:field="*{capaciteit}" />
+                    <div class="text-danger form-text" th:if="${#fields.hasErrors('capaciteit')}" th:errors="*{capaciteit}"></div>
+                </div>
+                
+                <!-- Buttons -->
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="submit" class="btn btn-primary me-md-2">
+                        <i class="bi bi-check-circle"></i> Opslaan
+                    </button>
+                    
+                    <button type="reset" class="btn btn-secondary">
+                        <i class="bi bi-x-circle"></i> Annuleren
+                    </button>
+                </div>
+			</form>
+		</div>
+	</div>
+	</div>	
+    </main>
+
+</body>
+</html>

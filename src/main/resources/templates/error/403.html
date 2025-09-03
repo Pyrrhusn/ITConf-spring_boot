@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout(~{::title}, _, ~{::.pageTitle}, ~{::main})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+</head>
+<body>
+    <h2 class="pageTitle">
+        <i class="bi bi-exclamation-diamond"></i> Error
+    </h2>
+    
+    <main>
+   		<div class="container d-flex flex-column justify-content-center align-items-center text-wrap">
+    	<h2 th:text="#{error.404.status}"></h2>
+    	<h4 th:text="#{error.404.body}"></h4>
+    	</div>
+    </main>
+
+</body>
+</html>

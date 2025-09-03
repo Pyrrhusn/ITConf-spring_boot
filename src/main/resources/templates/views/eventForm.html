@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout(~{::title}, _, ~{::.pageTitle}, ~{::main})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Event toevoegen</title>
+</head>
+<body>
+	<h2 class="pageTitle" th:inline="text">
+        <i class="bi bi-database-add"></i> <span th:text="|Event ${event.id == null ? 'toevoegen' : 'bewerken'}|"></span>
+    </h2>
+    
+    <main>
+    <div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <form th:action="@{${event.id} == null ? '/event/toevoegen' : '/event/' + ${event.id} + '/bewerken'}" th:object="${event}" method="post">
+                
+                <!-- Naam -->
+                <div class="mb-3">
+                    <label for="naam" class="form-label mb-1">Naam *</label>
+                    <input type="text" class="form-control" id="naam" th:field="*{naam}" maxlength="50" />
+                    <div class="text-danger form-text" th:if="${#fields.hasErrors('naam')}" th:errors="*{naam}"></div>
+                </div>
+
+                <!-- Beschrijving -->
+                <div class="mb-3">
+                    <label for="beschrijving" class="form-label mb-1">Beschrijving</label>
+                    <textarea class="form-control" id="beschrijving" th:field="*{beschrijving}" rows="4" maxlength="200"></textarea>
+                </div>
+
+                <!-- Sprekers -->
+                <div class="mb-3">
+        		<label class="form-label mb-1">Sprekers (minimaal 1, maximaal 3) *</label>
+       			<th:block th:each="spreker, iter : *{sprekers}">
+       			<div class="input-group mb-1">
+            		<input type="text" class="form-control" th:field="*{sprekers[__${iter.index}__].naam}" placeholder="Naam spreker" maxlength="50" />
+                   	<!-- Verwijder Spreker knop -->
+                   	<button type="submit" class="btn btn-danger"
+                    	name="removeSpreker" th:value="${iter.index}"
+                    	th:if="${#lists.size(event.sprekers) > 1}">
+                		<i class="bi bi-dash-circle"></i>
+            		</button>
+            	</div>
+            	<div class="text-danger form-text mb-2" th:if="${#fields.hasErrors('sprekers[' + iter.index + '].naam')}" th:errors="*{sprekers[__${iter.index}__].naam}"></div>
+       			</th:block>
+                   	<!-- Voeg Spreker Toe knop -->
+                <button type="submit" class="btn btn-success" name="addSpreker"
+                	th:if="${#lists.size(event.sprekers) < 3}">
+            		<i class="bi bi-plus-circle"> Voeg spreker toe </i>
+        		</button>
+        		<div class="text-danger form-text" th:if="${#fields.hasErrors('sprekers')}" th:errors="*{sprekers}"></div>
+    			</div>
+                
+                <!-- Lokaal -->
+                <div class="mb-3">
+                    <label for="lokaal" class="form-label mb-1">Lokaal *</label>
+                    <select class="form-select" id="lokaal" th:field="*{lokaal}" >
+                        <option value="">Selecteer een lokaal</option>
+                        <option th:each="l : ${lokalen}"
+                                th:value="${l.id}"
+                                th:text="${l.naam + ' (Capaciteit: ' + l.capaciteit + ')'}">
+                    	</option>
+                    </select>
+                    <div class="text-danger form-text" th:if="${#fields.hasErrors('lokaal')}" th:errors="*{lokaal}"></div>
+                </div>
+
+                <!-- Datum en Tijd -->
+                <div class="row mb-3">
+                    <div class="col-sm-6">
+                        <label for="datum" class="form-label mb-1">Datum *</label>
+                        <input type="date" class="form-control" id="datum" th:field="*{datum}" />
+                        <div class="text-danger form-text" th:if="${#fields.hasErrors('datum')}" th:errors="*{datum}"></div>
+                    </div>
+                    <div class="col-sm">
+                        <label for="startTijdstip" class="form-label mb-1">Start Tijdstip *</label>
+                        <input type="time" class="form-control" id="startTijdstip" th:field="*{startTijdstip}" />
+                        <div class="text-danger form-text" th:if="${#fields.hasErrors('startTijdstip')}" th:errors="*{startTijdstip}"></div>
+                    </div>
+                    <div class="col-sm">
+                        <label for="eindTijdstip" class="form-label mb-1">Eind Tijdstip *</label>
+                        <input type="time" class="form-control" id="eindTijdstip" th:field="*{eindTijdstip}" />
+                        <div class="text-danger form-text" th:if="${#fields.hasErrors('eindTijdstip')}" th:errors="*{eindTijdstip}"></div>
+                    </div>
+                </div>
+
+                <!-- Beamer Code en Check -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="beamercode" class="form-label mb-1">Beamercode *</label>
+                        <input type="text" class="form-control" id="beamercode" th:field="*{beamercode}" />
+                        <div class="text-danger form-text" th:if="${#fields.hasErrors('beamercode')}" th:errors="*{beamercode}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="beamercheck" class="form-label mb-1">Beamercheck *</label>
+                        <input type="text" class="form-control" id="beamercheck" th:field="*{beamercheck}" />
+                        <div class="text-danger form-text" th:if="${#fields.hasErrors('beamercheck')}" th:errors="*{beamercheck}"></div>
+                    </div>
+                </div>
+
+                <!-- Prijs -->
+                <div class="mb-3">
+                    <label for="prijs" class="form-label mb-1">Prijs *</label>
+                    <div class="input-group">
+                        <span class="input-group-text">&euro;</span>
+                        <!-- type number to only allow valid numbers -->
+                        <input type="text" class="form-control" id="prijs" th:field="*{{prijs}}" th:placeholder="#{price.format.placeholder}" th:pattern="#{price.input.pattern}" />
+                    </div>
+                    <div class="text-danger form-text" th:if="${#fields.hasErrors('prijs')}" th:errors="*{prijs}"></div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="submit" class="btn btn-primary me-md-2">
+                        <i class="bi bi-check-circle"></i> Opslaan
+                    </button>
+                    
+                    <a th:href="${event.id} == null ? '/event/toevoegen' : '/event/' + ${event.id}" class="btn btn-secondary">
+                        <i class="bi bi-x-circle"></i> Annuleren
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+	</div>
+    	
+    </main>
+</body>
+</html>

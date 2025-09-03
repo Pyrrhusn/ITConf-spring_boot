@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout(~{::title}, _, ~{::.pageTitle}, ~{::main})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Eventoverzicht</title>
+</head>
+<body>
+    <h2 class="pageTitle">
+        <i class="bi bi-calendar-week"></i> Eventoverzicht
+    </h2>
+    
+    <main>
+    	<div class="mb-3 d-flex justify-content-center gap-2">
+    	<th:block sec:authorize="hasRole('ROLE_ADMIN')">
+    	<a href="/event/toevoegen" class="btn btn-primary w-25 fs-5">
+           <i class="bi bi-calendar-plus-fill"></i> Nieuw event
+		</a>
+		<a href="/lokaal/toevoegen" class="btn btn-secondary w-25 fs-5">
+           <i class="bi bi-journal-plus"></i> Nieuw lokaal
+		</a>
+		</th:block>
+		
+		<a sec:authorize="hasRole('ROLE_USER')" href="/favorieten" class="btn btn-primary w-50 fs-5">
+           <i class="bi bi-person-heart"></i> Ga naar je favorieten
+		</a>
+		</div>
+        <div class="d-flex justify-content-center flex-row flex-wrap gap-4">
+                <div th:each="event : ${events}" class="card shadow-sm">
+                	<!-- Titel -->
+                    <div class="card-header bg-info-subtle text-info-emphasis">
+                        <h5 class="card-title m-0" th:text="${event.naam}"></h5>
+                    </div>
+                    
+                    <div class="card-body pb-0">
+                    	<!-- Lokaal | Datum | Tijd -->
+                        <div class="d-flex align-items-center mb-2 card-subtitle">
+                            <i class="bi bi-geo-alt-fill text-secondary me-1"></i>
+                            <span th:text="${event.lokaal.naam}"></span>
+                        	<i class="bi bi-calendar-event ms-4 me-1"></i>
+                            <span th:with="df=#{date.format.pattern}" th:text="${#temporals.format(event.datum, df)}"></span>
+							<i class="bi bi-clock-fill text-secondary ms-4 me-1"></i>
+                            <span th:with="tf=#{time.format.pattern}" th:text="|${#temporals.format(event.startTijdstip, tf)} - ${#temporals.format(event.eindTijdstip, tf)}|"></span>
+                        </div>
+                        
+                        <!-- Prijs -->
+                        <div class="mb-2">
+                        	<i class="bi bi-cash-stack text-secondary me-1"> </i>
+                        	<span th:text="|&euro; ${{event.prijs}}|"></span>
+                        </div>
+                        
+                        <!-- Sprekers -->
+                        <div class="d-flex justify-content-start align-items-start flex-row flex-wrap gap-2 mb-2">
+                        	<i class="bi bi-megaphone-fill text-secondary"></i>   
+                            <span th:text="${#lists.size(event.sprekers) > 1 ? 'Sprekers:' : 'Spreker:'}"></span>
+                            <ul class="list-unstyled">
+                                <li th:each="spreker : ${event.sprekers}" class="mb-1">
+                                    <i class="bi bi-person-fill text-secondary"></i>
+                                    <span th:text="${spreker.naam}"></span>
+                                </li>
+                            </ul>
+                        </div>
+                        	
+                        
+                    </div>
+                    
+                    <!-- Linkn naar eventpagina -->
+                    <div class="card-footer bg-transparent border-top-0 ps-2 pe-2">
+                        <a th:href="|/event/${event.id}|" class="btn btn-outline-success w-100 rounded-4">
+                            <i class="bi bi-arrow-right-circle"></i> Bekijk details
+                        </a>
+                         <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="|/event/${event.id}/bewerken|" class="mt-2 btn btn-outline-warning w-100 rounded-4">
+                            <i class="bi bi-wrench me-1"></i> Bewerk event
+                        </a>
+                    </div>
+                </div>
+            </div>
+        
+        <!-- Alert als er geen events zijn -->
+        <div th:if="${#lists.isEmpty(events)}" class="alert alert-info mt-4">
+            <i class="bi bi-info-circle-fill me-2"></i>
+            Er zijn momenteel geen events gepland.
+        </div>
+    </main>
+</body>
+</html>

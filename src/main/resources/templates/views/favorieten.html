@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout(~{::title}, _, ~{::.pageTitle}, ~{::main})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Favoriet Events</title>
+</head>
+<body>
+    <h2 class="pageTitle">
+        <i class="bi bi-info-square"></i> Favorieten
+    </h2>
+    
+    <main>
+    	<div class="container mt-4">
+    		<div class="row justify-content-center table-responsive">
+    			<table class="table table-hover align-middle">
+    				<thead>
+    					<tr>
+      						<th>#</th>
+      						<th>Naam</th>
+      						<th>Beschrijving</th>
+      						<th>Spreker(s)</th>
+      						<th>Lokaal</th>
+      						<th>Datum</th>
+      						<th>Tijd</th>
+      						<th>Prijs</th>
+      						<th><i class="bi bi-trash3-fill"></i></th>
+    					</tr>
+  					</thead>
+  					<tbody class="table-group-divider">
+  						<th:block th:each="fe, iter: ${favorieten}">
+  							<tr>
+      							<th scope="row" th:text="${iter.count}"></th>
+      							<td th:text="${fe.naam}"></td>
+      							<td class="mw-25 w-25">
+      								<div th:if="${fe.beschrijving}" th:text="${fe.beschrijving}"></div>
+        							<i th:unless="${fe.beschrijving}" class="bi bi-slash-lg"></i>
+      							</td>
+      							<td>
+      								<th:block th:each="spreker : ${fe.sprekers}">
+        							<div th:text="${spreker.naam}"></div>
+        							</th:block>
+      							</td>
+      							<td th:text="|${fe.lokaal.naam} - ${fe.lokaal.capaciteit}|"></td>
+      							<td th:with="df=#{date.format.pattern}" th:text="${#temporals.format(fe.datum, df)}"></td>
+      							<td th:with="tf=#{time.format.pattern}" th:text="|${#temporals.format(fe.startTijdstip, tf)} - ${#temporals.format(fe.eindTijdstip, tf)}|"></td>
+      							<td th:text="|&euro; ${{fe.prijs}}|"></td>
+      							<td>
+      								<form th:action="@{/favorieten}" method="post">
+  										<input type="hidden" name="eventId" th:value="${fe.id}" />
+    									<input type="hidden" name="action" th:value="remove" />
+    									<input type="hidden" name="location" th:value="favorieten" />
+  										<button type="submit" class="btn btn-danger">
+  										<i class="bi bi-x-circle-fill"></i>
+  										</button>
+  									</form>
+      							</td>
+    						</tr>
+  						</th:block>
+  					</tbody>
+    			</table>
+    			<div th:if="${#lists.isEmpty(favorieten)}" class="alert alert-info mt-4">
+            	<i class="bi bi-info-circle-fill me-2"></i>
+            		Geen favoriete events.
+        		</div>
+    		</div>
+    	</div>
+	</main>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout(~{::title}, _, ~{::.pageTitle}, ~{::main})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+	<h2 class="pageTitle">
+        <i class="bi bi-person-lock"></i> Login
+    </h2>
+    
+    <main>
+    	<div class="container mt-4">
+    	<div class="row justify-content-center">
+		
+		<div class="col-lg-8">
+    	<div th:if="${error}" class="alert alert-danger d-flex align-items-center" role="alert">			
+    		<i class="bi bi-exclamation-triangle-fill"></i> <div th:text="${error}" class="ms-2"></div>
+		</div>
+		<div th:if="${msg}" class="alert alert-info d-flex align-items-center" role="alert">			
+    		<i class="bi bi-info-circle-fill"></i> <div th:text="${msg}" class="ms-2"></div>
+		</div>
+		<form th:action="@{/login}" method="post">
+			<div class="mb-3">
+                    <label for="username" class="form-label mb-1">Gebruikersnaam</label>
+                    <input type="text" class="form-control" id="username" name="username" value='' autofocus="autofocus" />
+            </div>
+            
+            <div class="mb-3">
+                    <label for="password" class="form-label mb-1">Wachtwoord</label>
+                    <input type="password" class="form-control" id="password" name="password" />
+            </div>
+            
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="submit" class="btn btn-primary me-md-2">
+                        <i class="bi bi-check-circle"></i> Login
+                    </button>
+                    
+                    <button type="reset" class="btn btn-secondary">
+                        <i class="bi bi-x-circle"></i> Annuleren
+                    </button>
+                </div>
+		</form>
+		</div>
+		</div>
+		</div>
+    </main>
+
+</body>
+</html>

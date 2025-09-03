@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <title>404 Pagina niet gevonden</title>
+</head>
+<body class="error-page-body">
+
+<div class="error-container">
+    <div class="error-content">
+        <h1>404</h1>
+        <p th:text="#{error.404}"></p>
+        <a th:href="@{/}" th:text="#{error.404.toHome.tekst}"></a>
+    </div>
+</div>
+
+</body>
+</html>
